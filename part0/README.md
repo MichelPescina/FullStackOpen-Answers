@@ -116,7 +116,8 @@ sequenceDiagram
 
     Note right of browser: The user introduces a new message inside <br> the form and clicks the Save button.
 
-    Note right of browser: The browser redraws notes and<br> sends a POST request to the server.
+    Note right of browser: The browser redraws notes with new one <br> added and sends a POST request to the server.
+
     Note right of browser: The POST request's body contains the message: <br> {"content":"₍^. .^₎⟆","date":"2025-04-11T04:35:40.831Z"}
 
     browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
@@ -125,5 +126,6 @@ sequenceDiagram
     Note left of server: Receives the POST request, reads it,<br> validates and pushes the new note into the array.
     
     server-->>browser: 201 Created Response <br>Body {"message":"note created"}
+    deactivate server
 
 ```
