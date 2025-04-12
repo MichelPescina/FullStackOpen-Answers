@@ -1,5 +1,5 @@
 # Full Stack Open - Part 0
-## Excersice 0.4
+## Exercise 0.4
 
 ```mermaid
 sequenceDiagram
@@ -43,7 +43,7 @@ sequenceDiagram
     Note right of browser: The browser executes the callback <br> function that renders the notes
 ```
 
-## Excersice 0.5
+## Exercise 0.5
 
 ```mermaid
 sequenceDiagram
@@ -79,7 +79,7 @@ sequenceDiagram
     Note right of browser: The browser executes the callback <br> function that renders the notes
 ```
 
-## Excersice 0.6
+## Exercise 0.6
 
 ```mermaid
 sequenceDiagram
