@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 const Header = ({course}) => {
   return (
     <>
-      <h1>{course}</h1>
+      <h1>{course.name}</h1>
     </>
   )
 }
@@ -12,8 +12,8 @@ const Part = ({name, exercises}) => {
   return (<p> {name} {exercises} </p>)
 }
 
-const Content = ({parts}) => {
-  var elements = parts.map((part, i) => {
+const Content = ({course}) => {
+  var elements = course.parts.map((part, i) => {
     return (
       <Fragment key={i}>
         <Part name={part.name} exercises={part.exercises}/>
@@ -27,8 +27,8 @@ const Content = ({parts}) => {
   )
 }
 
-const Total = ({parts}) => {
-  let total = parts.reduce(
+const Total = ({course}) => {
+  let total = course.parts.reduce(
     (accum, curr) => accum + curr.exercises,
     0,
   )
@@ -40,27 +40,28 @@ const Total = ({parts}) => {
 }
 
 const App = () => {
-  const course = 'Half Stack application development'
-  const parts = [
-    {
-      name: 'Fundamentals of React',
-      exercises: 10
-    },
-    {
-      name: 'Using props to pass data',
-      exercises: 7
-    },
-    {
-      name: 'State of a component',
-      exercises: 14
-    }
-  ]
-
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  }
   return (
     <div>
       <Header course={course}/>
-      <Content parts={parts}/>
-      <Total parts={parts}/>
+      <Content course={course}/>
+      <Total course={course}/>
     </div>
   )
 }
