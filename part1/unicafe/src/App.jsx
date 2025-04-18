@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Statistic = ({text, value, isPercentage = false}) => {
+const StatisticLine = ({text, value, isPercentage = false}) => {
   return <p>{text}: {value}{isPercentage ? "%" : ""}</p>
 }
 
@@ -10,19 +10,19 @@ const Statistics = ({stats}) => {
     elements = Object.entries(stats).map((entry, i) => {
       let elem = null
       if (typeof(entry[1]) == "object") {
-        elem = <Statistic
+        elem = <StatisticLine
           key={i}
           text={entry[0]}
           value={entry[1].value}
           isPercentage={entry[1].isPercentage}
-          ></Statistic>
+          ></StatisticLine>
       }
       else {
-        elem = <Statistic
+        elem = <StatisticLine
           key={i}
           text={entry[0]}
           value={entry[1]}
-        ></Statistic>
+        ></StatisticLine>
       }
       return elem
     })
