@@ -4,6 +4,29 @@ const Statistic = ({text, value, isPercentage = false}) => {
   return <p>{text}: {value}{isPercentage ? "%" : ""}</p>
 }
 
+const Statistics = ({stats}) => {
+  let elements = Object.entries(stats).map((entry, i) => {
+    let elem = null
+    if (typeof(entry[1]) == "object") {
+      elem = <Statistic
+        key={i}
+        text={entry[0]}
+        value={entry[1].value}
+        isPercentage={entry[1].isPercentage}
+        ></Statistic>
+    }
+    else {
+      elem = <Statistic
+        key={i}
+        text={entry[0]}
+        value={entry[1]}
+      ></Statistic>
+    }
+    return elem;
+  })
+  return elements;
+}
+
 const Button = ({text, clickHandler}) => {
   return <button onClick={clickHandler}>{text}</button>
 }
@@ -14,8 +37,14 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
   const total = good + neutral + bad
-  const average = (good - bad) / total
-  const positive = good / total * 100
+  const statistics =  {
+    Good: good,
+    Neutral: neutral,
+    Bad: bad,
+    Total: total,
+    Average: (good - bad) / total,
+    Positive: {value: good / total * 100, isPercentage: true},
+  }
 
   const goodClickHdlr = () => {setGood(good + 1);}
   const neutralClickHdlr = () => {setNeutral(neutral + 1);}
@@ -32,12 +61,7 @@ const App = () => {
       </div>
       <h2>Statistics</h2>
       <div>
-        <Statistic text="Good" value={good}></Statistic>
-        <Statistic text="Neutral" value={neutral}></Statistic>
-        <Statistic text="Bad" value={bad}></Statistic>
-        <Statistic text="All" value={total}></Statistic>
-        <Statistic text="Average" value={average}></Statistic>
-        <Statistic text="Positive" value={positive} isPercentage={true}></Statistic>
+        <Statistics stats={statistics}></Statistics>
       </div>
     </div>
   )
