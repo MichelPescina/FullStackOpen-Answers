@@ -5,26 +5,30 @@ const Statistic = ({text, value, isPercentage = false}) => {
 }
 
 const Statistics = ({stats}) => {
-  let elements = Object.entries(stats).map((entry, i) => {
-    let elem = null
-    if (typeof(entry[1]) == "object") {
-      elem = <Statistic
-        key={i}
-        text={entry[0]}
-        value={entry[1].value}
-        isPercentage={entry[1].isPercentage}
+  let elements = null
+  if (stats.Total > 0) {
+    elements = Object.entries(stats).map((entry, i) => {
+      let elem = null
+      if (typeof(entry[1]) == "object") {
+        elem = <Statistic
+          key={i}
+          text={entry[0]}
+          value={entry[1].value}
+          isPercentage={entry[1].isPercentage}
+          ></Statistic>
+      }
+      else {
+        elem = <Statistic
+          key={i}
+          text={entry[0]}
+          value={entry[1]}
         ></Statistic>
-    }
-    else {
-      elem = <Statistic
-        key={i}
-        text={entry[0]}
-        value={entry[1]}
-      ></Statistic>
-    }
-    return elem;
-  })
-  return elements;
+      }
+      return elem
+    })
+  }
+  else elements = <p>No feedback given</p> 
+  return elements
 }
 
 const Button = ({text, clickHandler}) => {
