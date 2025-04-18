@@ -1,10 +1,18 @@
 import { useState } from 'react'
 
 const StatisticLine = ({text, value, isPercentage = false}) => {
-  return <p>{text}: {value}{isPercentage ? "%" : ""}</p>
+  return (
+    <>
+      <tr>
+        <td>{text}:</td>
+        <td>{value}{isPercentage ? "%" : ""}</td>
+      </tr>
+    </>
+  )
 }
 
 const Statistics = ({stats}) => {
+  let res = null;
   let elements = null
   if (stats.Total > 0) {
     elements = Object.entries(stats).map((entry, i) => {
@@ -15,7 +23,7 @@ const Statistics = ({stats}) => {
           text={entry[0]}
           value={entry[1].value}
           isPercentage={entry[1].isPercentage}
-          ></StatisticLine>
+        ></StatisticLine>
       }
       else {
         elem = <StatisticLine
@@ -26,9 +34,18 @@ const Statistics = ({stats}) => {
       }
       return elem
     })
+    res = (
+      <table>
+        <tbody>
+          {elements}
+        </tbody>
+      </table>
+    )
   }
-  else elements = <p>No feedback given</p> 
-  return elements
+  else {
+    res = <p>No feedback given</p>
+  }
+  return res
 }
 
 const Button = ({text, clickHandler}) => {
