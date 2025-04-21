@@ -13,9 +13,9 @@ const Part = ({name, exercises}) => {
 }
 
 const Content = ({course}) => {
-  var elements = course.parts.map((part, i) => {
+  var elements = course.parts.map((part) => {
     return (
-      <Fragment key={i}>
+      <Fragment key={part.id}>
         <Part name={part.name} exercises={part.exercises}/>
       </Fragment>
     )
