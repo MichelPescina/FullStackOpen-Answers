@@ -34,7 +34,7 @@ const Total = ({course}) => {
   )
   return (
     <>
-      <p>Number of exercises {total}</p>
+      <strong>Total of {total} exercises.</strong>
     </>
   )
 }
