@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const Entry = ({entry}) => {
-  return <div>{entry.name}</div>
+  return <div>{entry.name} {entry.number}</div>
 }
 
 const Phonebook = ({data}) => {
@@ -17,12 +17,13 @@ const Phonebook = ({data}) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', number: "123456789"}
   ])
   const [newName, setNewName] = useState('')
+  const [newNum, setNewNum] = useState('')
 
-  const updateInput = (event) => {
-    setNewName(event.target.value)
+  const factoryUpdate = (setState) => {
+    return (event) => setState(event.target.value)
   }
 
   const hasName = (data, name) => data.some(
@@ -35,9 +36,10 @@ const App = () => {
       alert(`${newName} is already added to phonebook.`)
     }
     else {
-      let updatedPersons = [...persons, {name: newName}]
+      let updatedPersons = [...persons, {name: newName, number: newNum}]
       setPersons(updatedPersons)
       setNewName('')
+      setNewNum('')
     }
   }
 
@@ -45,12 +47,18 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          name: <input value={newName} onChange={updateInput}/>
+        <div> 
+          Name: <input value={newName} onChange={factoryUpdate(setNewName)}/>
         </div>
         <div>
-          <button type="submit">add</button>
+          Number:
+          <input
+            type="tel"
+            value={newNum}
+            onChange={factoryUpdate(setNewNum)}
+          />
         </div>
+        <div> <button type="submit">Add</button> </div>
       </form>
       <h2>Numbers</h2>
       <Phonebook data={persons}></Phonebook>
