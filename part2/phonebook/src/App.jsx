@@ -25,11 +25,20 @@ const App = () => {
     setNewName(event.target.value)
   }
 
+  const hasName = (data, name) => data.some(
+    (entry) => entry.name === name
+  )
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    let updatedPersons = [...persons, {name: newName}]
-    setPersons(updatedPersons)
-    setNewName('')
+    if (hasName(persons, newName)) {
+      alert(`${newName} is already added to phonebook.`)
+    }
+    else {
+      let updatedPersons = [...persons, {name: newName}]
+      setPersons(updatedPersons)
+      setNewName('')
+    }
   }
 
   return (
