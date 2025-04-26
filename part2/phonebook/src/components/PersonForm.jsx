@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { factoryUpdate } from './factories'
+import { factoryUpdate } from './../factories'
 
 const PersonForm = ({ persons, setPersons }) => {
     const [newName, setNewName] = useState('')
