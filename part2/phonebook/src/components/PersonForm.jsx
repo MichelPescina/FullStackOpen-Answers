@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { factoryUpdate } from './../factories'
+import { factoryUpdate, basicError} from './../factories'
+import db from "./../services/phonebookDB"
 
 const PersonForm = ({ persons, setPersons }) => {
     const [newName, setNewName] = useState('')
@@ -15,10 +16,15 @@ const PersonForm = ({ persons, setPersons }) => {
             alert(`${newName} is already added to phonebook.`)
         }
         else {
-            let updatedPersons = [...persons, { name: newName, number: newNum }]
-            setPersons(updatedPersons)
-            setNewName('')
-            setNewNum('')
+            const newPerson = { name: newName, number: newNum }
+            db.create(newPerson)
+                .then(data => {
+                    const updatedPersons = [...persons, data]
+                    setPersons(updatedPersons)
+                    setNewName('')
+                    setNewNum('')
+                })
+                .catch(basicError("Couldn't create the new entry in the server"))
         }
     }
 

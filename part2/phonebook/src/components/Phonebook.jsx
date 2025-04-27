@@ -10,7 +10,7 @@ const Phonebook = ({ data, filter }) => {
     let elements = data.map((entry) => {
         let elem = null
         if (filter === '' || hasString(entry.name, filter)) {
-            elem = <Entry key={entry.name} entry={entry}></Entry>
+            elem = <Entry key={entry.id} entry={entry}></Entry>
         }
         return elem
     })
