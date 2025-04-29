@@ -17,8 +17,10 @@ const App = () => {
 
   const deleteHandler = (entry) => {
     if (window.confirm(`Do you want to delete ${entry.name}?`)) {
-      setPersons(persons.filter((person) => person.id != entry.id))
       db.eliminate(entry.id)
+        .then((data) => {
+          setPersons(persons.filter((person) => person.id != entry.id))
+        })
     }
   }
 

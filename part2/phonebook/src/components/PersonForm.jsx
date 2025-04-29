@@ -13,7 +13,20 @@ const PersonForm = ({ persons, setPersons }) => {
     const handleSubmit = (event) => {
         event.preventDefault()
         if (hasName(persons, newName)) {
-            alert(`${newName} is already added to phonebook.`)
+            const question = `${newName} is already added to phonebook. Do you want to replace the old number with a new one?`
+            if(window.confirm(question)) {
+                const id = persons.find(p => p.name === newName).id
+                const newPerson = {id: id, name: newName, number: newNum }
+                db.update(newPerson)
+                    .then(data => {
+                        const updatedPersons = persons.map(
+                            (p) => p.name === newName ? newPerson : p
+                        )
+                        setPersons(updatedPersons)
+                        setNewName('')
+                        setNewNum('')
+                    })
+            }
         }
         else {
             const newPerson = { name: newName, number: newNum }
