@@ -1,8 +1,12 @@
-const Entry = ({ entry }) => {
-    return <div>{entry.name} {entry.number}</div>
+const Entry = ({ entry, deleteHandler}) => {
+    return (
+        <div>
+            {entry.name} {entry.number}
+            <button onClick={() => deleteHandler(entry)}>Delete</button>
+        </div>)
 }
 
-const Phonebook = ({ data, filter }) => {
+const Phonebook = ({ data, filter, deleteHandler}) => {
     const hasString = (name, query) => {
         return name.toLowerCase().includes(query.toLowerCase())
     }
@@ -10,7 +14,7 @@ const Phonebook = ({ data, filter }) => {
     let elements = data.map((entry) => {
         let elem = null
         if (filter === '' || hasString(entry.name, filter)) {
-            elem = <Entry key={entry.id} entry={entry}></Entry>
+            elem = <Entry key={entry.id} entry={entry} deleteHandler={deleteHandler}></Entry>
         }
         return elem
     })

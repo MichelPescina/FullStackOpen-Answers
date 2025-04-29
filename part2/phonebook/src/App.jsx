@@ -15,6 +15,13 @@ const App = () => {
       .catch(basicError("An error has ocurred, the application couldn't connect to the server"))
   }, [])
 
+  const deleteHandler = (entry) => {
+    if (window.confirm(`Do you want to delete ${entry.name}?`)) {
+      setPersons(persons.filter((person) => person.id != entry.id))
+      db.eliminate(entry.id)
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -22,7 +29,7 @@ const App = () => {
       <h3>Add a new contact</h3>
       <PersonForm persons={persons} setPersons={setPersons}></PersonForm>
       <h3>Numbers</h3>
-      <Phonebook data={persons} filter={filter}></Phonebook>
+      <Phonebook data={persons} filter={filter} deleteHandler={deleteHandler}></Phonebook>
     </div>
   )
 }

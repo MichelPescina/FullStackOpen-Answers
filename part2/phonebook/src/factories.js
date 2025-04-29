@@ -1,3 +1,5 @@
+
+
 const factoryUpdate = (setState) => {
     return (event) => setState(event.target.value)
 }
@@ -8,5 +10,6 @@ const basicError = (message) => {
         alert(message)
     } 
 }
+
 
 export {factoryUpdate, basicError}
