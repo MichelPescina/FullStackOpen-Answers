@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { factoryUpdate, basicError} from './../factories'
-import db from "./../services/phonebookDB"
+import { factoryUpdate } from './../factories'
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, createHandler, updateHandler}) => {
     const [newName, setNewName] = useState('')
     const [newNum, setNewNum] = useState('')
 
@@ -13,31 +12,14 @@ const PersonForm = ({ persons, setPersons }) => {
     const handleSubmit = (event) => {
         event.preventDefault()
         if (hasName(persons, newName)) {
-            const question = `${newName} is already added to phonebook. Do you want to replace the old number with a new one?`
-            if(window.confirm(question)) {
-                const id = persons.find(p => p.name === newName).id
-                const newPerson = {id: id, name: newName, number: newNum }
-                db.update(newPerson)
-                    .then(data => {
-                        const updatedPersons = persons.map(
-                            (p) => p.name === newName ? newPerson : p
-                        )
-                        setPersons(updatedPersons)
-                        setNewName('')
-                        setNewNum('')
-                    })
-            }
+            updateHandler({name: newName, number: newNum})
+            setNewName('')
+            setNewNum('')
         }
         else {
-            const newPerson = { name: newName, number: newNum }
-            db.create(newPerson)
-                .then(data => {
-                    const updatedPersons = [...persons, data]
-                    setPersons(updatedPersons)
-                    setNewName('')
-                    setNewNum('')
-                })
-                .catch(basicError("Couldn't create the new entry in the server"))
+            createHandler({ name: newName, number: newNum })
+            setNewName('')
+            setNewNum('')
         }
     }
 
