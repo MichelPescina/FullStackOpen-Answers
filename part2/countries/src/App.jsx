@@ -1,53 +1,8 @@
 import { useState, useEffect } from 'react'
 import { getAllNames, getCountry } from './services/countriesConnect'
-
-const CountryInfo = ({country}) => {
-  if (country) {
-    const languages = Object.entries(country.languages).map(([key, value]) => {
-      return <li key={country.area +"_"+key}> {value} </li>
-    })
-    return (
-      <div>
-        <h2> {country.name.common} </h2>
-        <div>
-          Capital: {country.capital}
-          <br/>
-          Area: {country.area}
-        </div>
-        <h3>Languages</h3>
-        <div>
-          <ul>
-            {languages}
-          </ul>
-        </div>
-        <img src={country.flags.png} alt={country.flag.alt}></img>
-      </div>
-    )
-  }
-}
-
-const Notification = ({text}) => {
-  if (text) {
-    return <div>{text}</div>
-  }
-  else {
-    return null
-  }
-}
-
-const Country = ({name}) => {
-  return <div>{name}</div>
-}
-
-const Countries = ({countries}) => {
-  if (!countries) {
-    return null
-  }
-  let elements = countries.map((elem) => {
-    return <Country key={elem} name={elem}></Country>
-  })
-  return <div>{elements}</div>
-}
+import CountryInfo from './components/CountryInfo'
+import Countries from './components/Countries'
+import Notification from './components/Notification'
 
 const App = () => {
   const [country, setCountry] = useState("")
@@ -97,6 +52,15 @@ const App = () => {
     setShown(null)
   }
 
+  const buttonHandler = (name) => {
+    getCountry(name)
+      .then((data) => setShown(data))
+      .catch((error) => {
+        showNotif("An error ocurred while retrieving the information from the server")
+        console.log(error.message)
+      })
+  }
+
   return (
     <div>
       <form onSubmit={submitHandler}> 
@@ -105,7 +69,7 @@ const App = () => {
         <button type="submit"> Search </button>
       </form>
       <Notification text={notification}></Notification>
-      <Countries countries={availables}></Countries>
+      <Countries countries={availables} buttonHandler={buttonHandler}></Countries>
       <CountryInfo country={shown}></CountryInfo>
     </div>
   )
