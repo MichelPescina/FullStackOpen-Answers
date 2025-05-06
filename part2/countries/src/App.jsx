@@ -4,6 +4,16 @@ import CountryInfo from './components/CountryInfo'
 import Countries from './components/Countries'
 import Notification from './components/Notification'
 
+const SearchBox = ({text, changeHandler, submitHandler}) => {
+  return (
+    <form onSubmit={submitHandler}> 
+      find countries: 
+      <input value={text} onChange={changeHandler}></input>
+      <button type="submit"> Search </button>
+    </form>
+  )
+}
+
 const App = () => {
   const [country, setCountry] = useState("")
   const [countries, setCountries] = useState(null)
@@ -63,11 +73,11 @@ const App = () => {
 
   return (
     <div>
-      <form onSubmit={submitHandler}> 
-        find countries: 
-        <input value={country} onChange={changeHandler}></input>
-        <button type="submit"> Search </button>
-      </form>
+      <SearchBox
+        text={country}
+        changeHandler={changeHandler} 
+        submitHandler={submitHandler}
+      ></SearchBox>
       <Notification text={notification}></Notification>
       <Countries countries={availables} buttonHandler={buttonHandler}></Countries>
       <CountryInfo country={shown}></CountryInfo>
