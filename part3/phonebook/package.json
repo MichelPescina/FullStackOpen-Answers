@@ -1,0 +1,15 @@
+{
+  "name": "phonebook",
+  "version": "1.0.0",
+  "description": "The backend for a phonebook application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michel Pescina",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
