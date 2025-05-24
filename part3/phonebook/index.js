@@ -26,6 +26,25 @@ let persons = [
     }
 ]
 
+function validate(person) {
+    error = []
+    if (person) {
+        if (!Object.hasOwn(person, "name")) {
+            error.push("New entry does not have name property")
+        }
+        else if (persons.find(value => value.name === person.name)) {
+            error.push("Name must be unique")
+        }
+        if (!Object.hasOwn(person, "number")) {
+            error.push("New entry does not have number property")
+        }
+    }
+    else {
+        error.push("New entry is empty (undefined)")
+    }
+    return error
+}
+
 app.get("/info", (req, res) => {
     const date = Date()
     const person = persons.length > 1? "persons" : "person"
@@ -53,13 +72,15 @@ app.delete("/api/persons/:id", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
     const id = String(Math.floor(Math.random() * 10000))
-    const person = req.body
-    if (person) {
-        persons.push({id, ...person})
+    const data = req.body
+    const error = validate(data)
+    if (error.length == 0) {
+        const person = {id, ...data}
+        persons.push(person)
         res.status(201).json({id, ...person})
     }
     else {
-        res.status(400).end()
+        res.status(400).json({length: error.length, error: error})
     }
 })
 
