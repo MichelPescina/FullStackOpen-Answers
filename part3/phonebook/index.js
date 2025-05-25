@@ -1,7 +1,9 @@
 const express = require("express")
 const app = express()
+const morgan = require("morgan")
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
     {
@@ -45,6 +47,7 @@ function validate(person) {
     return error
 }
 
+
 app.get("/info", (req, res) => {
     const date = Date()
     const person = persons.length > 1? "persons" : "person"
@@ -83,6 +86,7 @@ app.post("/api/persons", (req, res) => {
         res.status(400).json({length: error.length, error: error})
     }
 })
+
 
 const PORT = 3001
 app.listen(PORT, () => {
