@@ -8,7 +8,7 @@
     "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "@powershell rm -r ./dist && cd ../../part2/phonebook && npm run build && cd ../../part3/phonebook && @powershell cp -r ../../part2/phonebook/dist ./dist",
-    "deploy:ui": "git add * && git commit -m UIBuild && git push"
+    "deploy:ui": "cd ../../ && git add * && git commit -m UIBuild && git push"
   },
   "author": "Michel Pescina",
   "dependencies": {
