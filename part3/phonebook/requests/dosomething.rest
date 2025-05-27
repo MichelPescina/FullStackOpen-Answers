@@ -13,3 +13,18 @@ content-type: application/json
 ###
 
 GET http://localhost:3001/api/persons/1553
+
+
+###
+
+GET https://testest-l4il.onrender.com/api/persons
+
+###
+
+POST https://testest-l4il.onrender.com/api/persons
+content-type: application/json
+
+{
+    "name": "Pingo Mango",
+    "number": "040-123456"
+}
