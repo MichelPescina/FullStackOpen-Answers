@@ -1,5 +1,7 @@
+require('dotenv').config()
 const express = require("express")
 const app = express()
+const Person = require('./models/person')
 
 const morgan = require("morgan")
 morgan.token("body", (req, res) => JSON.stringify(req.body))
@@ -61,7 +63,9 @@ app.get("/info", (req, res) => {
 })
 
 app.get("/api/persons", (req, res) => {
-    res.json(persons)
+    Person.find({}).then((persons) => {
+        res.json(persons)
+    })
 })
 
 app.get("/api/persons/:id", (req, res) => {

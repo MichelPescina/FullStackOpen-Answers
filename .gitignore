@@ -3,3 +3,4 @@ node_modules/
 /part2/phonebook/dist/
 .vscode/
 *.env
+requests/
