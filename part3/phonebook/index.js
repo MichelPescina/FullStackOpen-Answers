@@ -88,9 +88,10 @@ app.post("/api/persons", (req, res) => {
     const data = req.body
     const error = validate(data)
     if (error.length == 0) {
-        const person = {id, ...data}
-        persons.push(person)
-        res.status(201).json({id, ...person})
+        const entry = new Person({name: data.name, phone: data.number})
+        entry.save().then((saved) => {
+            res.status(201).json(saved)
+        })
     }
     else {
         res.status(400).json({length: error.length, error: error})
