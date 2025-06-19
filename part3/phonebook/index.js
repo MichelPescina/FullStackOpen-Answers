@@ -44,9 +44,6 @@ function validate(person) {
         else if (person.name.length === 0) {
             throw new Error("Name is empty")
         }
-        else if (persons.find(value => value.name === person.name)) {
-            throw new Error("Name must be unique")
-        }
         else if (!Object.hasOwn(person, "number")) {
             throw new Error("New entry does not have number property")
         }
@@ -65,10 +62,12 @@ app.get("/info", (req, res) => {
     res.send(`Phonebook has info for ${persons.length} ${person} <br> ${date}`)
 })
 
-app.get("/api/persons", (req, res) => {
-    Person.find({}).then((persons) => {
-        res.json(persons)
-    })
+app.get("/api/persons", (req, res, error) => {
+    Person.find({})
+        .then((persons) => {
+            res.json(persons)
+        })
+        .catch(error => next(error))
 })
 
 app.get("/api/persons/:id", (req, res) => {
@@ -89,15 +88,40 @@ app.delete("/api/persons/:id", (req, res, next) => {
         .catch(error => next(error))
 })
 
-app.post("/api/persons", (req, res) => {
-    const id = String(Math.floor(Math.random() * 10000))
+app.post("/api/persons", (req, res, next) => {
     const data = req.body
     // Express.js handles automatically errors thrown during synchronous execution
     validate(data)
-    const entry = new Person({name: data.name, phone: data.number})
-    entry.save().then((saved) => {
-        res.status(201).json(saved)
-    })
+    // Check if there is a contact with the same name already
+    Person.find({name: data.name})
+        .then(result => {
+            if (result.length > 0) throw new Error("Name must be unique")
+            // Insert new entry into the dataset
+            const entry = new Person({name: data.name, phone: data.number})
+            entry.save()
+                .then((saved) => {
+                    res.status(201).json(saved)
+                })
+                .catch(error => next(error))
+        })
+        .catch(error => next(error))
+})
+
+app.put("/api/persons/:id", (req, res, next) => {
+    const data = req.body
+    validate(data)
+    // Check if there is an entry with such id
+    Person.findById(req.params.id)
+        .then(entry => {
+            if (!entry) res.status(404).end()
+            entry.phone = data.number
+            entry.save()
+                .then((saved) => {
+                    res.status(201).json(saved)
+                })
+                .catch(error => next(error))
+        })
+        .catch(error => next(error))
 })
 
 // Unknown endpoints
