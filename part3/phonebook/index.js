@@ -37,24 +37,29 @@ let persons = [
 ]
 
 function validate(person) {
-    error = []
+    error = undefined
     if (person) {
         if (!Object.hasOwn(person, "name")) {
-            error.push("New entry does not have name property")
+            error = "New entry does not have name property"
+        }
+        else if (person.length == 0) {
+            error = "Name is empty"
         }
         else if (persons.find(value => value.name === person.name)) {
-            error.push("Name must be unique")
+            error = "Name must be unique"
         }
-        if (!Object.hasOwn(person, "number")) {
-            error.push("New entry does not have number property")
+        else if (!Object.hasOwn(person, "number")) {
+            error = "New entry does not have number property"
+        }
+        else if (person.number.length == 0) {
+            error = "Number is empty"
         }
     }
     else {
-        error.push("New entry is empty (undefined)")
+        error = "New entry is empty (undefined)"
     }
     return error
 }
-
 
 app.get("/info", (req, res) => {
     const date = Date()
@@ -78,23 +83,26 @@ app.get("/api/persons/:id", (req, res) => {
     }
 })
 
-app.delete("/api/persons/:id", (req, res) => {
-    persons = persons.filter(val => val.id != req.params.id)
-    res.status(204).end()
+app.delete("/api/persons/:id", (req, res, next) => {
+    Person.findByIdAndDelete(req.params.id)
+        .then(result => {
+            res.status(204).end()
+        })
+        .catch(error => next(error))
 })
 
 app.post("/api/persons", (req, res) => {
     const id = String(Math.floor(Math.random() * 10000))
     const data = req.body
     const error = validate(data)
-    if (error.length == 0) {
+    if (!error) {
         const entry = new Person({name: data.name, phone: data.number})
         entry.save().then((saved) => {
             res.status(201).json(saved)
         })
     }
     else {
-        res.status(400).json({length: error.length, error: error})
+        res.status(400).json({error})
     }
 })
 
