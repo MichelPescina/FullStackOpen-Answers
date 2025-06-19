@@ -37,28 +37,26 @@ let persons = [
 ]
 
 function validate(person) {
-    error = undefined
     if (person) {
         if (!Object.hasOwn(person, "name")) {
-            error = "New entry does not have name property"
+            throw new Error("New entry does not have name property")
         }
-        else if (person.length == 0) {
-            error = "Name is empty"
+        else if (person.name.length === 0) {
+            throw new Error("Name is empty")
         }
         else if (persons.find(value => value.name === person.name)) {
-            error = "Name must be unique"
+            throw new Error("Name must be unique")
         }
         else if (!Object.hasOwn(person, "number")) {
-            error = "New entry does not have number property"
+            throw new Error("New entry does not have number property")
         }
-        else if (person.number.length == 0) {
-            error = "Number is empty"
+        else if (person.number.length === 0) {
+            throw new Error("Number is empty")
         }
     }
     else {
-        error = "New entry is empty (undefined)"
+        throw new Error("New entry is empty (undefined)")
     }
-    return error
 }
 
 app.get("/info", (req, res) => {
@@ -94,16 +92,29 @@ app.delete("/api/persons/:id", (req, res, next) => {
 app.post("/api/persons", (req, res) => {
     const id = String(Math.floor(Math.random() * 10000))
     const data = req.body
-    const error = validate(data)
-    if (!error) {
-        const entry = new Person({name: data.name, phone: data.number})
-        entry.save().then((saved) => {
-            res.status(201).json(saved)
-        })
+    // Express.js handles automatically errors thrown during synchronous execution
+    validate(data)
+    const entry = new Person({name: data.name, phone: data.number})
+    entry.save().then((saved) => {
+        res.status(201).json(saved)
+    })
+})
+
+// Unknown endpoints
+app.use((req, res) => {
+    res.status(404).send({error: "Unknown endpoint."})
+})
+
+// Error handlers
+app.use((error, req, res, next) => {
+    console.error(error)
+    if (error.name === "CastError") {
+        return res.status(400).send({error: "Malformatted ID"})
     }
-    else {
-        res.status(400).json({error})
+    else if (error.name === "Error") {
+        return res.status(400).send({error: error.message})
     }
+    next(error)
 })
 
 
