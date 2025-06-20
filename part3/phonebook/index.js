@@ -97,8 +97,12 @@ app.put("/api/persons/:id", (req, res, next) => {
     // Check if there is an entry with such id
     Person.findById(req.params.id)
         .then(entry => {
-            if (!entry) res.status(404).end()
+            console.log("Entry", entry)
+            if (!entry) res.status(404).send({error: "Contact no longer exists!"})
             entry.phone = data.number
+            // It's not necessary to enable validation on update here because
+            // I'm not using that API to perform updates, save() does validation
+            // as part of its process.
             entry.save()
                 .then((saved) => {
                     res.status(201).json(saved)
@@ -119,8 +123,12 @@ app.use((error, req, res, next) => {
     if (error.name === "CastError") {
         return res.status(400).send({error: "Malformatted ID"})
     }
+    else if (error.name === "ValidationError") {
+        console.log(error.message)
+        return res.status(400).json({error: error.message.split(': ').pop()})
+    }
     else if (error.name === "Error") {
-        return res.status(400).send({error: error.message})
+        return res.status(400).json({error: error.message})
     }
     next(error)
 })

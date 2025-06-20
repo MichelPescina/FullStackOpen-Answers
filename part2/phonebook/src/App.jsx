@@ -27,13 +27,17 @@ const App = () => {
     }, 5000)
   }
 
-  useEffect(() => {
-    db.getAll("http://localhost:3001/persons")
+  const loadData = () => {
+    db.getAll()
       .then(data => {setPersons(data)})
       .catch((error) => errorHandler(
         error.message,
-        "An error has ocurred, the application couldn't connect to the server"
+        error.response.data.error
       ))
+  }
+
+  useEffect(() => {
+    loadData()
   }, [])
 
   const createHandler = (newPerson) => {
@@ -44,9 +48,10 @@ const App = () => {
         successHandler(`Added ${newPerson.name}`)
       })
       .catch((error) => {
+        loadData()
         errorHandler(
           error.message,
-          "Couldn't create the new entry in the server"
+          error.response.data.error
         )
       })
   }
@@ -64,10 +69,10 @@ const App = () => {
             successHandler(`Updated phone number of ${newPerson.name}`)
         })
         .catch((error) => {
-          setPersons(persons.filter((person) => person.id != id))
+          loadData()
           errorHandler(
             error.message,
-            `Information of ${newPerson.name} has already been removed from the server`
+            error.response.data.error
           )
         })
     }
@@ -80,10 +85,13 @@ const App = () => {
         .then((data) => {
           successHandler(`Deleted ${entry.name}`)
         })
-        .catch((error) => errorHandler(
-          error.message,
-          `${entry.name} has already been removed from the server`
-        ))
+        .catch((error) => {
+          loadData()
+          errorHandler(
+            error.message,
+            error.response.data.error
+          )
+        })
     }
   }
 
