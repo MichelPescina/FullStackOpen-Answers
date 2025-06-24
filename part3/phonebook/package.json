@@ -8,7 +8,8 @@
     "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "@powershell rm -r ./dist && cd ../../part2/phonebook && npm run build && cd ../../part3/phonebook && @powershell cp -r ../../part2/phonebook/dist ./dist",
-    "deploy:ui": "cd ../../ && git add * && git commit -m UIBuild && git push"
+    "deploy:ui": "cd ../../ && git add * && git commit -m UIBuild && git push",
+    "lint": "eslint ."
   },
   "author": "Michel Pescina",
   "dependencies": {
@@ -17,5 +18,11 @@
     "express": "^5.1.0",
     "mongoose": "^8.15.1",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@stylistic/eslint-plugin": "^5.0.0",
+    "eslint": "^9.29.0",
+    "globals": "^16.2.0"
   }
 }
